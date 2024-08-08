@@ -1,12 +1,5 @@
 #include "Canvas.hpp"
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <algorithm>
-#include <vector>
-#include <cmath>
-
 Canvas::Canvas() {}
 
 Canvas::Canvas(int width, int height) : width(width), height(height)
@@ -51,7 +44,7 @@ void Canvas::canvas_to_ppm(std::string fileName)
             std::string pixelData = std::to_string(std::clamp(static_cast<int>(std::round(color.r * 255)), 0, 255)) + " " +
                                     std::to_string(std::clamp(static_cast<int>(std::round(color.g * 255)), 0, 255)) + " " +
                                     std::to_string(std::clamp(static_cast<int>(std::round(color.b * 255)), 0, 255));
-            
+
             // for all pixels after first, check if adding this pixel would exceed the line length limit
             if (x > 0 && lineLength + pixelData.length() + 1 > 70) // +1 for the space before the pixelData
             {

@@ -1,10 +1,5 @@
 #include "Tuple.hpp"
 
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <cmath>
-
 Tuple::Tuple() {}
 
 Tuple::Tuple(float x, float y, float z, int w) : x(x), y(y), z(z), w(w)

@@ -1,11 +1,39 @@
+#pragma once
+
+#include <iostream>
+#include <iomanip>
+#include <cmath>
 #include <vector>
+#include <stdexcept>
+#include <initializer_list>
+
+#include "Tuple.hpp"
 
 struct Matrix
 {
-    int rows = 3;
-    int cols = 4; 
-    int defaultValue = 0;
-    std::vector<std::vector<int>> matrix;
+    static constexpr float EPSILON = 0.00001f;
+    int rows, cols;
+    std::vector<std::vector<float>> elements;
 
-    Matrix() : matrix(rows, std::vector<int>(cols, defaultValue)) {}
+    Matrix();
+    Matrix(int rows, int cols);
+    Matrix(std::initializer_list<std::initializer_list<float>> values);
+
+    Matrix identity() const;
+    Matrix transpose() const;
+
+    bool operator==(const Matrix &other) const;
+    Matrix operator+(const Matrix &other) const;
+    Matrix operator-(const Matrix &other) const;
+    Matrix operator*(const Matrix &other) const;
+    Tuple operator*(const Tuple &tuple) const;
+    Matrix operator*(float scalar) const;
+    Matrix operator/(float scalar) const;
+    Matrix operator-() const;
+
+    float &at(int row, int col);
+    const float &at(int row, int col) const;
+    bool is_square() const;
+
+    void print() const;
 };

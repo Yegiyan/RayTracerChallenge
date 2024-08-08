@@ -1,8 +1,13 @@
 #pragma once
 
-#include "Color.hpp"
-#include <vector>
+#include <iostream>
+#include <fstream>
 #include <string>
+#include <algorithm>
+#include <vector>
+#include <cmath>
+
+#include "Color.hpp"
 
 struct Canvas
 {

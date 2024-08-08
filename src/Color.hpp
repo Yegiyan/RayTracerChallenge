@@ -1,5 +1,10 @@
 #pragma once
 
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <cmath>
+
 struct Color
 {
     static constexpr float EPSILON = 0.00001f;

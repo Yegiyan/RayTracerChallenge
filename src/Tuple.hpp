@@ -1,5 +1,10 @@
 #pragma once
 
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <sstream>
+
 struct Tuple
 {
     static constexpr float EPSILON = 0.00001f;

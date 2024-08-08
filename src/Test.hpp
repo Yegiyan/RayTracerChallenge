@@ -160,6 +160,96 @@ void test_canvas_to_ppm()
     assert_equal(data_is_equal, "Canvas to PPM Conversion");
 }
 
+void test_matrix_multiplication()
+{
+    Matrix m1 = {{1, 2, 3, 4},
+                 {5, 6, 7, 8},
+                 {9, 8, 7, 6},
+                 {5, 4, 3, 2}};
+
+    Matrix m2 = {{-2, 1, 2, 3},
+                 {3, 2, 1, -1},
+                 {4, 3, 6, 5},
+                 {1, 2, 7, 8}};
+
+    int val = 2;
+    Matrix m3 = {{1, 2, 3},
+                 {4, 5, 6},
+                 {7, 8, 9}};
+
+    Matrix key1 = {{2, 4, 6},
+                   {8, 10, 12},
+                   {14, 16, 18}};
+
+    Matrix key2 = {{20, 22, 50, 48},
+                   {44, 54, 114, 108},
+                   {40, 58, 110, 102},
+                   {16, 26, 46, 42}};
+
+    Matrix m4 = m3 * val;
+    Matrix m5 = m1 * m2;
+    assert_equal((m4 == key1) && (m5 == key2), "Matrix Multiplication");
+}
+
+void test_matrix_multiplication_scalar()
+{
+    int val = 2;
+    Matrix m = {{1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}};
+
+    Matrix ans = m * val;
+    Matrix key = {{2, 4, 6},
+                  {8, 10, 12},
+                  {14, 16, 18}};
+
+    assert_equal((ans == key), "Matrix & Scalar Multiplication");
+}
+
+void test_matrix_multiplication_tuple()
+{
+    Tuple t = Tuple::Point(1, 2, 3);
+    Matrix m = {{1, 2, 3, 4},
+                {2, 4, 4, 2},
+                {8, 6, 4, 1},
+                {0, 0, 0, 1}};
+
+    Tuple ans = m * t;
+    Tuple key = Tuple::Point(18, 24, 33);
+
+    assert_equal(ans == key, "Matrix & Tuple Multiplication");
+}
+
+void test_matrix_identity()
+{
+    Matrix m = {{0, 1, 2, 4},
+                {1, 2, 4, 8},
+                {2, 4, 8, 16},
+                {4, 8, 16, 32}};
+
+    Matrix ans = m * m.identity();
+    Matrix key = m;
+
+    assert_equal(ans == key, "Matrix Identity Multiplication");
+}
+
+void test_matrix_transpose()
+{
+    Matrix m = {{0, 9, 3, 0},
+                {9, 8, 0, 8},
+                {1, 8, 5, 3},
+                {0, 0, 5, 8}};
+
+    Matrix key = {{0, 9, 1, 0},
+                  {9, 8, 8, 0},
+                  {3, 0, 5, 5},
+                  {0, 8, 3, 8}};
+
+    Matrix ans = m.transpose();
+
+    assert_equal((ans == key) && (m.identity().transpose() == m.identity()), "Matrix Transposing");
+}
+
 void run_tests()
 {
     test_tuple_creation();
@@ -175,263 +265,9 @@ void run_tests()
     test_canvas_creation();
     test_canvas_pixel_assignment();
     test_canvas_to_ppm();
-}
-
-void use_interface()
-{
-    int input0 = 0, input1 = 0, input2 = 0;
-    float x1 = 0, y1 = 0, z1 = 0;
-    float x2 = 0, y2 = 0, z2 = 0;
-    float mag = 0, scale = 0, dot = 0;
-    Tuple a, b, c;
-
-    std::cout << "Create 1 or 2 tuples?" << std::endl;
-    std::cout << "1. Create one" << std::endl;
-    std::cout << "2. Create two" << std::endl;
-    std::cout << "> ";
-    std::cin >> input0;
-
-    if (input0 == 1)
-    {
-        std::cout << "Choose tuple type" << std::endl;
-        std::cout << "1. Point" << std::endl;
-        std::cout << "2. Vector" << std::endl;
-        std::cout << "> ";
-        std::cin >> input0;
-
-        if (input0 == 1)
-        {
-            std::cout << "Create point (X, Y, Z)" << std::endl;
-            std::cout << "X: ";
-            std::cin >> x1;
-            std::cout << "Y: ";
-            std::cin >> y1;
-            std::cout << "Z: ";
-            std::cin >> z1;
-            a = Tuple::Point(x1, y1, z1);
-
-            std::cout << "Choose operation" << std::endl;
-            std::cout << "1. Negate" << std::endl;
-            std::cout << "> ";
-            std::cin >> input0;
-
-            if (input0 == 1)
-            {
-                a = -a;
-                a.print();
-            }
-        }
-
-        if (input0 == 2)
-        {
-            std::cout << "Create vector (X, Y, Z)" << std::endl;
-            std::cout << "X: ";
-            std::cin >> x1;
-            std::cout << "Y: ";
-            std::cin >> y1;
-            std::cout << "Z: ";
-            std::cin >> z1;
-            a = Tuple::Vector(x1, y1, z1);
-
-            std::cout << "Choose operation" << std::endl;
-            std::cout << "1. Magnitude" << std::endl;
-            std::cout << "2. Normalize" << std::endl;
-            std::cout << "3. Negate" << std::endl;
-            std::cout << "4. Scale" << std::endl;
-            std::cout << "> ";
-            std::cin >> input0;
-
-            switch (input0)
-            {
-                case 1:
-                    mag = a.magnitude();
-                    std::cout << "Magnitude: " << mag << std::endl;
-                    break;
-                case 2:
-                    a = a.normalize();
-                    a.print();
-                    break;
-                case 3:
-                    a = -a;
-                    a.print();
-                    break;
-                case 4:
-                    std::cout << "Input scale value" << std::endl;
-                    std::cout << "> ";
-                    std::cin >> scale;
-                    a = a * scale;
-                    a.print();
-                    break;
-                default:
-                    std::cout << "Invalid command!" << std::endl;
-                    break;
-            }
-        }
-    }
-
-    else if (input0 == 2)
-    {
-        std::cout << "Choose 1st tuple type" << std::endl;
-        std::cout << "1. Point" << std::endl;
-        std::cout << "2. Vector" << std::endl;
-        std::cout << "> ";
-        std::cin >> input1;
-
-        std::cout << "Choose 2nd tuple type" << std::endl;
-        std::cout << "1. Point" << std::endl;
-        std::cout << "2. Vector" << std::endl;
-        std::cout << "> ";
-        std::cin >> input2;
-
-        if (input1 == 1)
-        {
-            std::cout << "Create first tuple (point) (X, Y, Z)" << std::endl;
-            std::cout << "X: ";
-            std::cin >> x1;
-            std::cout << "Y: ";
-            std::cin >> y1;
-            std::cout << "Z: ";
-            std::cin >> z1;
-            a = Tuple::Point(x1, y1, z1);
-        }
-
-        else if (input1 == 2)
-        {
-            std::cout << "Create first tuple (vector) (X, Y, Z)" << std::endl;
-            std::cout << "X: ";
-            std::cin >> x1;
-            std::cout << "Y: ";
-            std::cin >> y1;
-            std::cout << "Z: ";
-            std::cin >> z1;
-            a = Tuple::Vector(x1, y1, z1);
-        }
-
-        if (input2 == 1)
-        {
-            std::cout << "Create second tuple (point) (X, Y, Z)" << std::endl;
-            std::cout << "X: ";
-            std::cin >> x2;
-            std::cout << "Y: ";
-            std::cin >> y2;
-            std::cout << "Z: ";
-            std::cin >> z2;
-            b = Tuple::Point(x2, y2, z2);
-        }
-
-        else if (input2 == 2)
-        {
-            std::cout << "Create second tuple (vector) (X, Y, Z)" << std::endl;
-            std::cout << "X: ";
-            std::cin >> x2;
-            std::cout << "Y: ";
-            std::cin >> y2;
-            std::cout << "Z: ";
-            std::cin >> z2;
-            b = Tuple::Vector(x2, y2, z2);
-        }
-
-        if (a.is_vector() && b.is_vector())
-        {
-            std::cout << "Choose operation" << std::endl;
-            std::cout << "1. Add vectors" << std::endl;
-            std::cout << "2. Subtract vectors" << std::endl;
-            std::cout << "3. Dot product" << std::endl;
-            std::cout << "4. Cross product" << std::endl;
-            std::cout << "> ";
-            std::cin >> input0;
-
-            switch (input0)
-            {
-                case 1:
-                    c = a + b;
-                    c.print();
-                    break;
-                case 2:
-                    std::cout << "Choose operation" << std::endl;
-                    std::cout << "1. Vec1 - Vec2" << std::endl;
-                    std::cout << "2. Vec2 - Vec1" << std::endl;
-                    std::cout << "> ";
-                    std::cin >> input0;
-                    if (input0 == 1)
-                        c = a - b;
-                    else if (input0 == 2)
-                        c = b - a;
-                    break;
-                case 3:
-                    dot = Tuple::dot(a, b);
-                    std::cout << "Dot Product: " << dot << std::endl;
-                    break;
-                case 4:
-                    std::cout << "Choose operation" << std::endl;
-                    std::cout << "1. Vec1 x Vec2" << std::endl;
-                    std::cout << "2. Vec2 x Vec1" << std::endl;
-                    std::cout << "> ";
-                    std::cin >> input0;
-                    if (input0 == 1)
-                        c = Tuple::cross(a, b);
-                    else if (input0 == 2)
-                        c = Tuple::cross(b, a);
-                    c.print();
-                    break;
-                default:
-                    std::cout << "Invalid command!" << std::endl;
-                    break;
-            }
-        }
-
-        else if (a.is_point() && b.is_point())
-        {
-            std::cout << "Choose operation" << std::endl;
-            std::cout << "1. Get vector from one point to another" << std::endl;
-            std::cout << "> ";
-            std::cin >> input0;
-
-            switch (input0)
-            {
-                case 1:
-                    std::cout << "Choose operation" << std::endl;
-                    std::cout << "1. Point1 -> Point2" << std::endl;
-                    std::cout << "2. Point2 -> Point1" << std::endl;
-                    std::cout << "> ";
-                    std::cin >> input0;
-                    if (input0 == 1)
-                        c = a - b;
-                    else if (input0 == 2)
-                        c = b - a;
-                    c.print();
-                    break;
-                default:
-                    std::cout << "Invalid command!" << std::endl;
-                    break;
-            }
-        }
-
-        else if ((a.is_point() && b.is_vector()) || (a.is_vector() && b.is_point()))
-        {
-            std::cout << "Choose operation" << std::endl;
-            std::cout << "1. Add vector from point" << std::endl;
-            std::cout << "2. Subtract vector from point" << std::endl;
-            std::cout << "> ";
-            std::cin >> input0;
-
-            switch (input0)
-            {
-                case 1:
-                    c = a + b;
-                    c.print();
-                    break;
-                case 2:
-                    if (a.is_point())
-                        c = a - b;
-                    else if (b.is_point())
-                        c = b - a;
-                    c.print();
-                    break;
-                default:
-                    std::cout << "Invalid command!" << std::endl;
-                    break;
-            }
-        }
-    }
+    test_matrix_multiplication();
+    test_matrix_multiplication_scalar();
+    test_matrix_multiplication_tuple();
+    test_matrix_identity();
+    test_matrix_transpose();
 }
