@@ -216,7 +216,6 @@ void test_matrix_multiplication_tuple()
 
     Tuple ans = m * t;
     Tuple key = Tuple::Point(18, 24, 33);
-
     assert_equal(ans == key, "Matrix & Tuple Multiplication");
 }
 
@@ -229,7 +228,6 @@ void test_matrix_identity()
 
     Matrix ans = m * m.identity();
     Matrix key = m;
-
     assert_equal(ans == key, "Matrix Identity Multiplication");
 }
 
@@ -246,8 +244,103 @@ void test_matrix_transpose()
                   {0, 8, 3, 8}};
 
     Matrix ans = m.transpose();
-
     assert_equal((ans == key) && (m.identity().transpose() == m.identity()), "Matrix Transposing");
+}
+
+void test_matrix_determinant()
+{
+    Matrix m = {{1, 5},
+                {-3, 2}};
+
+    int key = 17;
+    int ans = m.determinant();
+    assert_equal(ans == key, "Matrix Determinant");
+}
+
+void test_matrix_submatrix()
+{
+    Matrix m = {{-6, 1, 1, 6},
+                {-8, 5, 8, 6},
+                {-1, 0, 8, 2},
+                {-7, 1, -1, 1}};
+
+    Matrix key = {{-6, 1, 6},
+                  {-8, 8, 6},
+                  {-7, -1, 1}};
+
+    Matrix ans = m.submatrix(2, 1);
+    assert_equal(ans == key, "Matrix to Sub Matrix");
+}
+
+void test_matrix_minor()
+{
+    Matrix m = {{3, 5, 0},
+                {2, -1, -7},
+                {6, -1, 5}};
+
+    int key = 25;
+    int ans = m.minor(1, 0);
+    assert_equal(ans == key, "Matrix Minor");
+}
+
+void test_matrix_cofactor()
+{
+    Matrix m = {{3, 5, 0},
+                {2, -1, -7},
+                {6, -1, 5}};
+
+    int key1 = -12;
+    int ans1 = m.cofactor(0, 0);
+    int key2 = -25;
+    int ans2 = m.cofactor(1, 0);
+    assert_equal((ans1 == key1) && (ans2 == key2), "Matrix Cofactor");
+}
+
+void test_matrix_determinant_3x3()
+{
+    Matrix m = {{1, 2, 6},
+                {-5, 8, -4},
+                {2, 6, 4}};
+
+    int key1 = 56, key2 = 12, key3 = -46, key4 = -196;
+
+    int ans1 = m.cofactor(0, 0);
+    int ans2 = m.cofactor(0, 1);
+    int ans3 = m.cofactor(0, 2);
+    int ans4 = m.determinant();
+    assert_equal((ans1 == key1) && (ans2 == key2) && (ans3 == key3) && (ans4 == key4), "Matrix Determinant 3x3");
+}
+
+void test_matrix_determinant_4x4()
+{
+    Matrix m = {{-2, -8, 3, 5},
+                {-3, 1, 7, 3},
+                {1, 2, -9, 6},
+                {-6, 7, 7, -9}};
+
+    int key1 = 690, key2 = 447, key3 = 210, key4 = 51, key5 = -4071;
+    int ans1 = m.cofactor(0, 0);
+    int ans2 = m.cofactor(0, 1);
+    int ans3 = m.cofactor(0, 2);
+    int ans4 = m.cofactor(0, 3);
+    int ans5 = m.determinant();
+    assert_equal((ans1 == key1) && (ans2 == key2) && (ans3 == key3) && (ans4 == key4) && (ans5 == key5), "Matrix Determinant 4x4");
+}
+
+void test_matrix_invertibility()
+{
+    Matrix m1 = {{6, 4, 4, 4},
+                {5, 5, 7, 6},
+                {4, -9, 3, -7},
+                {9, 1, 7, -6}};
+
+    Matrix m2 = {{-4, 2, -2, 3},
+                 {9, 6, 2, 6},
+                 {0, -5, 1, -5},
+                 {0, 0, 0, 0}};
+
+    bool key1 = true, key2 = false;
+    assert_equal((m1.is_invertible() == key1 && m2.is_invertible() == key2), "Matrix Invertibility");
 }
 
 void run_tests()
@@ -270,4 +363,11 @@ void run_tests()
     test_matrix_multiplication_tuple();
     test_matrix_identity();
     test_matrix_transpose();
+    test_matrix_determinant();
+    test_matrix_submatrix();
+    test_matrix_minor();
+    test_matrix_cofactor();
+    test_matrix_determinant_3x3();
+    test_matrix_determinant_4x4();
+    test_matrix_invertibility();
 }

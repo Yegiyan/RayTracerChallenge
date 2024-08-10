@@ -19,8 +19,12 @@ struct Matrix
     Matrix(int rows, int cols);
     Matrix(std::initializer_list<std::initializer_list<float>> values);
 
+    int determinant() const;
     Matrix identity() const;
     Matrix transpose() const;
+    Matrix submatrix(int row, int col) const;
+    int minor(int row, int col) const;
+    int cofactor(int row, int col) const;
 
     bool operator==(const Matrix &other) const;
     Matrix operator+(const Matrix &other) const;
@@ -33,6 +37,7 @@ struct Matrix
 
     float &at(int row, int col);
     const float &at(int row, int col) const;
+    bool is_invertible() const;
     bool is_square() const;
 
     void print() const;

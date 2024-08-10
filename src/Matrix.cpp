@@ -15,10 +15,36 @@ Matrix::Matrix(std::initializer_list<std::initializer_list<float>> values) : row
     }
 }
 
+int Matrix::determinant() const
+{
+    if (!is_square())
+        throw std::invalid_argument("No determinant found: matrix isn't square!");
+
+    int det = 0;
+    int size = cols;
+
+    if (size == 2)
+    {
+        int a = elements[0][0];
+        int b = elements[1][0];
+        int c = elements[0][1];
+        int d = elements[1][1];
+        return (a * d) - (b * c);
+    }
+
+    else
+    {
+        for (int i = 0; i < size; ++i)
+            det += elements[0][i] * cofactor(0, i);
+    }
+
+    return det;
+}
+
 Matrix Matrix::identity() const
 {
     if (!is_square())
-        throw std::invalid_argument("Matrix doesn't have an identity because it's not square!");
+        throw std::invalid_argument("No identity found: matrix isn't square!");
 
     int size = rows;
     Matrix m(size, size);
@@ -34,6 +60,45 @@ Matrix Matrix::transpose() const
         for (int j = 0; j < cols; ++j)
             result.elements[j][i] = elements[i][j];
     return result;
+}
+
+Matrix Matrix::submatrix(int row, int col) const
+{
+    Matrix result(rows - 1, cols - 1);
+    int subI = 0, subJ = 0;
+
+    for (int i = 0; i < rows; ++i)
+    {
+        if (i == row)
+            continue;
+
+        subJ = 0;
+        for (int j = 0; j < cols; ++j)
+        {
+            if (j == col)
+                continue;
+
+            result.elements[subI][subJ] = elements[i][j];
+            ++subJ;
+        }
+        ++subI;
+    }
+
+    return result;
+}
+
+int Matrix::minor(int row, int col) const
+{
+    Matrix sub = this->submatrix(row, col);
+    return sub.determinant();
+}
+
+int Matrix::cofactor(int row, int col) const
+{
+    if ((row + col) % 2)
+        return -minor(row, col);
+    else
+        return minor(row, col);
 }
 
 bool Matrix::operator==(const Matrix &other) const
@@ -134,6 +199,11 @@ const float &Matrix::at(int row, int col) const
     if (row < 0 || row >= rows || col < 0 || col >= cols)
         throw std::out_of_range("Matrix indices out of range!");
     return elements[row][col];
+}
+
+bool Matrix::is_invertible() const
+{
+    return determinant() != 0;
 }
 
 bool Matrix::is_square() const
