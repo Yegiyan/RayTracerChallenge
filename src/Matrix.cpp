@@ -87,6 +87,28 @@ Matrix Matrix::submatrix(int row, int col) const
     return result;
 }
 
+Matrix Matrix::inverse() const
+{
+    if (!is_square())
+        throw std::invalid_argument("No inverse found: matrix isn't square!");
+
+    if (!is_invertible())
+        throw std::invalid_argument("No inverse found: matrix has no inverse (det = 0)!");
+
+    int size = rows;
+    float det = determinant();
+
+    Matrix cof_matrix(size, size);
+    for (int i = 0; i < size; ++i)
+        for (int j = 0; j < size; ++j)
+            cof_matrix.elements[i][j] = cofactor(i, j);
+
+    Matrix adj_matrix = cof_matrix.transpose();
+    Matrix inv_matrix = adj_matrix / det;
+
+    return inv_matrix;
+}
+
 int Matrix::minor(int row, int col) const
 {
     Matrix sub = this->submatrix(row, col);

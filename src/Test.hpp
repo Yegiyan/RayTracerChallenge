@@ -343,6 +343,43 @@ void test_matrix_invertibility()
     assert_equal((m1.is_invertible() == key1 && m2.is_invertible() == key2), "Matrix Invertibility");
 }
 
+void test_matrix_inverse()
+{
+    Matrix m1 = {{-5, 2, 6, -8},
+                 {1, -5, 1, 8},
+                 {7, 7, -6, -7},
+                 {1, -3, 7, 4}};
+
+    Matrix m2 = {{8, -5, 9, 2},
+                 {7, 5, 6, 1},
+                 {-6, 0, 9, 6},
+                 {-3, 0, -9, -4}};
+
+    Matrix m3 = {{9, 3, 0 ,9},
+                 {-5, -2, -6, -3},
+                 {-4, 9, 6, 4},
+                 {-7, 6, 6, 2}};
+
+    Matrix key1 = {{0.21805f, 0.45113f, 0.24060f, -0.04511f},
+                   {-0.808279f, -1.45677f, -0.44361f, 0.52068f},
+                   {-0.07895f, -0.22368f, -0.05263f, 0.19737f},
+                   {-0.52256f, -0.81391f, -0.30075f, 0.30639f}};
+
+    Matrix key2 = { {-0.15385, -0.15385, -0.28205, -0.53846},
+                    {-0.07692, 0.12308, 0.02564, 0.03077},
+                    {0.35897, 0.35897, 0.43590, 0.92308},
+                    {-0.69231, -0.69231, -0.76923, -1.92308}};
+
+    Matrix key3 = {{-0.04074, -0.07778, 0.14444, -0.22222},
+                   {-0.07778, 0.03333, 0.36667, -0.33333},
+                   {-0.02901, -0.14630, -0.10926, 0.12963},
+                   {0.17778, 0.06667, -0.26667, 0.33333}};
+
+    Matrix m4 = m1 * m2;
+    Matrix key4 = m4 * m2.inverse();
+    assert_equal((m1.inverse() == key1) && (m2.inverse() == key2) && (m3.inverse() == key3) && (m1 == key4), "Matrix Inversing");
+}
+
 void run_tests()
 {
     test_tuple_creation();
@@ -370,4 +407,5 @@ void run_tests()
     test_matrix_determinant_3x3();
     test_matrix_determinant_4x4();
     test_matrix_invertibility();
+    test_matrix_inverse();
 }

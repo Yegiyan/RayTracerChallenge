@@ -23,6 +23,7 @@ struct Matrix
     Matrix identity() const;
     Matrix transpose() const;
     Matrix submatrix(int row, int col) const;
+    Matrix inverse() const;
     int minor(int row, int col) const;
     int cofactor(int row, int col) const;
 
