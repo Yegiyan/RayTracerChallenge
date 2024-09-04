@@ -247,16 +247,6 @@ void test_matrix_transpose()
     assert_equal((ans == key) && (m.identity().transpose() == m.identity()), "Matrix Transposing");
 }
 
-void test_matrix_determinant()
-{
-    Matrix m = {{1, 5},
-                {-3, 2}};
-
-    int key = 17;
-    int ans = m.determinant();
-    assert_equal(ans == key, "Matrix Determinant");
-}
-
 void test_matrix_submatrix()
 {
     Matrix m = {{-6, 1, 1, 6},
@@ -294,6 +284,16 @@ void test_matrix_cofactor()
     int key2 = -25;
     int ans2 = m.cofactor(1, 0);
     assert_equal((ans1 == key1) && (ans2 == key2), "Matrix Cofactor");
+}
+
+void test_matrix_determinant_2x2()
+{
+    Matrix m = {{1, 5},
+                {-3, 2}};
+
+    int key = 17;
+    int ans = m.determinant();
+    assert_equal(ans == key, "Matrix Determinant 2x2");
 }
 
 void test_matrix_determinant_3x3()
@@ -380,6 +380,62 @@ void test_matrix_inverse()
     assert_equal((m1.inverse() == key1) && (m2.inverse() == key2) && (m3.inverse() == key3) && (m1 == key4), "Matrix Inversing");
 }
 
+void test_matrix_translation()
+{
+    Matrix transform(4, 4);
+    transform = transform.identity();
+    transform = transform.translate(5, -3, 2);
+
+    Tuple point = Tuple::Point(-3, 4, 5);
+    Tuple vector = Tuple::Vector(-3, 4, 5);
+
+    Tuple ans1 = transform * point;
+    Tuple key1 = Tuple::Point(2, 1, 7);
+
+    Tuple ans2 = transform.inverse() * point;
+    Tuple key2 = Tuple::Point(-8, 7, 3);
+
+    Tuple ans3 = transform * vector;
+    Tuple key3 = vector;
+
+    assert_equal((ans1 == key1) && (ans2 == key2) && (ans3 == key3), "Matrix Translation");
+}
+
+void test_matrix_scaling()
+{
+    Matrix transform(4, 4);
+    transform = transform.identity();
+    transform = transform.scale(2, 3, 4);
+
+    Tuple point = Tuple::Point(-4, 6, 8);
+    Tuple vector = Tuple::Vector(-4, 6, 8);
+
+    Tuple ans1 = transform * point;
+    Tuple key1 = Tuple::Point(-8, 18, 32);
+
+    Tuple ans2 = transform * vector;
+    Tuple key2 = Tuple::Vector(-8, 18, 32);
+
+    Tuple ans3 = transform.inverse() * vector;
+    Tuple key3 = Tuple::Vector(-2, 2, 2);
+
+    assert_equal((ans1 == key1) && (ans2 == key2) && (ans3 == key3), "Matrix Scaling");
+}
+
+void test_matrix_reflection()
+{
+    Matrix transform(4, 4);
+    transform = transform.identity();
+    transform = transform.scale(-1, 1, 1);
+
+    Tuple point = Tuple::Point(2, 3, 4);
+
+    Tuple ans = transform * point;
+    Tuple key = Tuple::Point(-2, 3, 4);
+
+    assert_equal(ans == key, "Matrix Reflection");
+}
+
 void run_tests()
 {
     test_tuple_creation();
@@ -400,12 +456,15 @@ void run_tests()
     test_matrix_multiplication_tuple();
     test_matrix_identity();
     test_matrix_transpose();
-    test_matrix_determinant();
     test_matrix_submatrix();
     test_matrix_minor();
     test_matrix_cofactor();
+    test_matrix_determinant_2x2();
     test_matrix_determinant_3x3();
     test_matrix_determinant_4x4();
     test_matrix_invertibility();
     test_matrix_inverse();
+    test_matrix_translation();
+    test_matrix_scaling();
+    test_matrix_reflection();
 }

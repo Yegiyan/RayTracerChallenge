@@ -27,6 +27,9 @@ struct Matrix
     int minor(int row, int col) const;
     int cofactor(int row, int col) const;
 
+    Matrix translate(int x, int y, int z) const;
+    Matrix scale(int x, int y, int z) const;
+
     bool operator==(const Matrix &other) const;
     Matrix operator+(const Matrix &other) const;
     Matrix operator-(const Matrix &other) const;

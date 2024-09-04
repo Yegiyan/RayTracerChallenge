@@ -123,7 +123,35 @@ int Matrix::cofactor(int row, int col) const
         return minor(row, col);
 }
 
-bool Matrix::operator==(const Matrix &other) const
+Matrix Matrix::translate(int x, int y, int z) const
+{
+    if (rows != 4 || cols != 4)
+        throw std::invalid_argument("Translation can only be applied to a 4x4 matrix!");
+
+    Matrix matrix = Matrix::identity();
+    matrix.elements[0][3] = x;
+    matrix.elements[1][3] = y;
+    matrix.elements[2][3] = z;
+
+    return (*this) * matrix;
+}
+
+Matrix Matrix::scale(int x, int y, int z) const
+{
+    if (rows != 4 || cols != 4)
+        throw std::invalid_argument("Scaling can only be applied to a 4x4 matrix!");
+
+    Matrix matrix = Matrix::identity();
+    matrix.elements[0][0] = x;
+    matrix.elements[1][1] = y;
+    matrix.elements[2][2] = z;
+
+    return (*this) * matrix;
+}
+
+/* ============ MATRIX OPERATORS ============  */
+
+    bool Matrix::operator==(const Matrix &other) const
 {
     if (rows != other.rows || cols != other.cols)
         return false;

@@ -5,6 +5,7 @@
 #include "Color.hpp"
 #include "Canvas.hpp"
 #include "Matrix.hpp"
+
 #include "Test.hpp"
 
 int main()
