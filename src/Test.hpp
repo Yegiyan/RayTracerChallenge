@@ -9,6 +9,8 @@
 #include <iomanip>
 #include <cmath>
 
+const double PI = 3.141592653589793238463;
+
 void assert_equal(bool condition, const std::string& message)
 {
     if (!condition)
@@ -436,6 +438,21 @@ void test_matrix_reflection()
     assert_equal(ans == key, "Matrix Reflection");
 }
 
+void test_tuple_rotation_x()
+{
+    Tuple point = Tuple::Point(0, 1, 0);
+    Tuple half_quarter = point.rotate_x(PI / 4);
+    Tuple full_quarter = point.rotate_x(PI / 2);
+
+    Tuple ans1 = half_quarter;
+    Tuple key1 = Tuple::Point(0, sqrt(2) / 2, sqrt(2) / 2);
+
+    Tuple ans2 = full_quarter;
+    Tuple key2 = Tuple::Point(0, 0, 1);
+
+    assert_equal((ans1 == key1) && (ans2 == key2), "Tuple Rotation X");
+}
+
 void run_tests()
 {
     test_tuple_creation();
@@ -467,4 +484,5 @@ void run_tests()
     test_matrix_translation();
     test_matrix_scaling();
     test_matrix_reflection();
+    test_tuple_rotation_x();
 }

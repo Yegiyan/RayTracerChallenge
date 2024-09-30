@@ -37,6 +37,15 @@ Tuple Tuple::cross(const Tuple& a, const Tuple& b)
     return Tuple::Vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 }
 
+Tuple Tuple::rotate_x(double radian)
+{
+    float new_y = y * cos(radian) - z * sin(radian);
+    float new_z = y * sin(radian) + z * cos(radian);
+    return Tuple(x, new_y, new_z, w);
+}
+
+/* ============ TUPLE OPERATORS ============  */
+
 bool Tuple::operator==(const Tuple& other) const
 {
     return std::fabs(x - other.x) < EPSILON &&

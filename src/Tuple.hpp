@@ -27,6 +27,8 @@ struct Tuple
     static float dot(const Tuple& a, const Tuple& b);
     static Tuple cross(const Tuple& a, const Tuple& b);
 
+    Tuple rotate_x(double radian);
+
     float magnitude();
     Tuple normalize();
     bool is_point() const;
